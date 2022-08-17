@@ -15,17 +15,19 @@ DB_PASSWORD=YOUR_OWN_PASSWORD
 
 Afterward, you must generate the key with command below:
 php artisan key:generate
-
-And than run:
 php artisan migrate
 npm install
+
+And than run:
+php artisan serve
+npm run dev
 
 
 ## Microservices ##
 - Membuat article baru
 (POST): /api/article
 
--Menampilkan seluruh article di database dengan paging pada parameter limit & offset.
+- Menampilkan seluruh article di database dengan paging pada parameter limit & offset.
 (GET): /article/<limit>/entries/<offset>
 
 - Menampilkan article dengan id yang di-request

@@ -77,8 +77,8 @@ export default {
     </h2>
     
     <div class="mt-10">
-      <div class="grid grid-cols-4 gap-4">
-        <div v-for="row in table.data" class="p-6 bg-white rounded-lg border border-gray-200 shadow-md mx-10">
+      <div class="grid grid-cols-4 gap-1">
+        <div v-for="row in table.data" class="p-6 bg-white rounded-lg border border-gray-200 shadow-md mx-3">
             <a href="#">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight">{{ row.title }}</h5>
             </a>

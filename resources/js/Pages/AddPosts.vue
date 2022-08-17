@@ -32,21 +32,52 @@ export default {
             this.submit();
         },
         submit(){
-             axios.post('/api/article', this.form).then(response => {
+            
+            this.$swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirm'
+                }).then((result) => { 
+
+                    if ( result.isConfirmed) {
+
+                        axios.post('/api/article', this.form).then(response => {
                 
-                this.form.title = '';
-                this.form.category = '';
-                this.form.content = '';
+                            this.form.title = '';
+                            this.form.category = '';
+                            this.form.content = '';
 
-                this.errors = [];
+                            this.errors = [];
+                    
+                            this.$swal.fire(
+                                'Success!',
+                                'Data Update Successfully',
+                                'success'
+                                ).then( (result) => {
+                                    this.$inertia.get(`/all-post/${this.form.status.toLowerCase()}`);
+                                });
 
-            }).catch( reject => {
-                this.errors = reject.response.data.errors;
-            })
+                    }).catch( reject => {
+                        this.errors = reject.response.data.errors;
+                        this.$swal.fire(
+                            'Failed!',
+                            'Data Update Failed',
+                            'error'
+                            )
+
+                    })
+
+                    }
+                    
+                });
+                
         }
     },
     mounted(){
-        if (this.editPost) {
+        if (this.editPost.post) {
             this.form.title = this.editPost.post.title;
             this.form.content = this.editPost.post.content;
             this.form.category = this.editPost.post.category;

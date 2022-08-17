@@ -20,34 +20,51 @@ export default {
   data() {
     return {
       table: [],
-      entries: 10,
+      entries: 5,
       from: 0,
+      status,
+      prev_page: null,
+      next_page: null,
+      url: null
     }
   },
   methods: {
-    fetchData(status) {
+    fetchData() {
 
-      let url = '/api/article/'+this.entries+'/status/'+status;
+      !this.url ? this.url = '/api/article/'+this.entries+'/status/'+this.status: '';
 
-      axios.get(url).then( response => {
+      if(this.url) {
+        axios.get(this.url).then( response => {
         this.table = response.data.posts;
-        
+
         if (this.table.data) {
 
           this.from = this.table.from;
 
         }
       })
+      }
+      
     },
     trash(id){
-
-      axios.delete('/api/article/'+id).then( response => {
-        this.fetchData();
-      })
+      this.$swal.fire(
+          'Are you sure?',
+          'warning'
+        ).then( (result) => {
+          axios.delete('/api/article/'+id).then( response => {
+            this.fetchData();
+          })
+        })
+      
+    },
+    goToPage(url){
+      this.url = url;
+      this.fetchData();
     }
   },
   mounted(){
-    this.fetchData(this.props.status);
+    this.status = this.props.status;
+    this.fetchData();
   }
 }
 </script>
@@ -92,7 +109,7 @@ export default {
                     <td class="py-4 px-6 text-center">
                       <div class="vp-raw inline-flex align-center gap-2 flex-wrap">
                           <Link class="font-medium text-gray-900 focus:outline-none bg-white rounded-lg border-gray-200 focus:z-10 focus:ring-4 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 hover:bg-gray-100 hover:text-blue-700 dark:hover:text-white dark:hover:bg-gray-700 px-3 py-1.5 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 hover:bg-gray-100 hover:text-blue-700 dark:hover:text-white dark:hover:bg-gray-700 text-sm px-3 py-1.5" 
-                                :href="'/add-post/'+row.id">
+                                :href="`/post/${row.id}/update`">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil-minus" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M8 20l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4h4z"></path>
@@ -116,5 +133,14 @@ export default {
             </tbody>
         </table>
     </div>
+    <nav class="container mt-6">
+      <ul class="flex float-right items-center ">
+        <li v-for=" row in table.links">
+          <a href="#" v-html="row.label" @click.prevent="goToPage(row.url)" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          
+          </a>
+        </li>
+      </ul>
+    </nav>
   </Container> 
 </template>

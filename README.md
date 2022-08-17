@@ -29,7 +29,7 @@ npm install
 (GET): /article/<limit>/entries/<offset>
 
 - Menampilkan article dengan id yang di-request
-(GET): /api/articl/<id>
+(GET): /api/article/<id>
 
 - Merubah data article dengan id yang di-request
 (POST): /api/article/<id>

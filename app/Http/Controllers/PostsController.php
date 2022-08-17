@@ -15,7 +15,7 @@ class PostsController extends Controller
     public function index($limit = 10, $status = null)
     {
 
-        $status != 'null' || !$status ? $posts = Posts::where('status',$status)->paginate($limit) : $posts = Posts::paginate($limit);
+        $status != 'null' || !$status ? $posts = Posts::where('status',$status)->orderBy('id','desc')->paginate($limit) : $posts = Posts::orderBy('id','desc')->paginate($limit);
 
         return response()->json([
             'posts' => $posts

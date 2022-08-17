@@ -17,39 +17,31 @@ use App\Models\Posts;
 |
 */
 
-Route::get('/{status?}', function ($status = null) {
+Route::get('/', function () {
+    return redirect('all-post');
+});
+
+Route::get('/all-post/{status?}', function ($status = 'publish') {
+    
     return Inertia::render('Posts', [
-        // 'canLogin' => Route::has('login'),
-        // 'canRegister' => Route::has('register'),
-        // 'laravelVersion' => Application::VERSION,
-        // 'phpVersion' => PHP_VERSION,
         'status' => $status
     ]);
+})->name('allpost');
+
+Route::get('/post/create', function ($id=null) {
+        return Inertia::render('AddPosts');   
 });
 
-Route::get('/add-post', function ($id=null) {
-    
-        return Inertia::render('AddPosts');
-            
-});
-
-// Route::get('/add-post/{id?}', function ($id=null) {
-//     if ($id) {
-//         return Inertia::render('AddPosts', [
-//             'post' => Posts::find($id),
-//             'id' => $id
-//         ]);
-//     } else {
-//         return Inertia::render('AddPosts');
-//     }
-    
-// });
-
+Route::get('/post/{id?}/update', function ($id=null) {
+        return Inertia::render('AddPosts', [
+            'post' => Posts::find($id),
+            'id' => $id
+        ]);
+}); 
 
 Route::get('/preview', function () {
-    return Inertia::render('AddPosts');
+    return Inertia::render('PreviewPosts');
 });
-
 // Route::get('/dashboard', function () {
 //     return Inertia::render('Dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
